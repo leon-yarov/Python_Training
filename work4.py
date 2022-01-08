@@ -454,27 +454,42 @@ class Tree():
     def __repr__(self):
         if not self.left and not self.right:
             return "Tree({0})".format(repr(self.entry))
-
         return "Tree({0},{1},{2})".format(repr(self.entry),repr(self.left),repr(self.right))
 
 
 def build_tree(tree):
     if len(tree) == 1:
-        return Tree(tree,None,None)
+        return Tree(tree[0])
     return Tree(tree[0],build_tree(tree[1]),build_tree(tree[2]))
 
 def max_tree(tree):
     """Get the max element in a tree"""
-    if not tree:
-        return None
+    if not tree: return None
     maximum = tree.entry
-    if tree.left != None:
-        maximum = max(maximum, max_tree(tree.left))
-    if tree.right != None:
-        maximum = max(maximum, max_tree(tree.right))
-
-    if type(maximum) is tuple: maximum = maximum[0]
+    if tree.left != None:   maximum = max(maximum, max_tree(tree.left))
+    if tree.right != None:  maximum = max(maximum, max_tree(tree.right))
     return maximum
+
+def min_tree(tree):
+    """Get the max element in a tree"""
+    if not tree: return None
+    minimum = tree.entry
+    if tree.left != None:   minimum = min(minimum, min_tree(tree.left))
+    if tree.right != None:  minimum = min(minimum, min_tree(tree.right))
+    return minimum
+
+
+def is_BST_tree(tree):
+    """Check if a tree is a BST
+    tree: a binary tree"""
+    if not tree: return True
+    if tree.left and max_tree(tree.left) > tree.entry: return False
+    if tree.right and min_tree(tree.right) < tree.entry: return False
+    return is_BST_tree(tree.left) and is_BST_tree(tree.right)
 
 tree1 = (12, (6, (2,), (8,)), (15, (14,), (18,)))
 t1=build_tree(tree1)
+
+tree2 = (12, (6, (2,), (8,)), (15, (7,), (20,)))
+t2=build_tree(tree2)
+
